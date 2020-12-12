@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+  zqd:
+    container_name: zqd
+    image: jfedotov/zqd:latest
+    ports:
+      - "5020:9867"
+    working_dir: /zqd_app
+    volumes:
+      - "./spaces:/zqd_app/spaces"
+      - "./pcap_store:/zqd_app/pcap_store"
