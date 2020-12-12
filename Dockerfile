@@ -30,7 +30,6 @@ ENV PATH /usr/local/bin/zq-v0.24.0.linux-amd64:$PATH
 #make directory for zq spaces and pcap_store
 RUN mkdir spaces
 RUN mkdir pcap_store
-RUN echo test
 #expose zqd listen port
 EXPOSE 9867
 #start zqd 

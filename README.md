@@ -1,4 +1,6 @@
 # docker_zqd
+https://hub.docker.com/r/jfedotov/zqd
+
 **LIMITATION:**
 
 it’s not possible for remote clients to import packet capture data (pcap files) directly to a remote zqd!
