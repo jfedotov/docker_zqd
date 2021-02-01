@@ -19,9 +19,11 @@ ENV PATH /opt/zeek:$PATH
 ENV PATH /opt/zeek/bin:$PATH
 #copy zeekrunner file to run zeek and pcap support
 COPY zeekrunner /opt/zeek/
+#set version from ZQ
+ARG ZQVERSION
 #installing zq
-RUN wget https://github.com/brimsec/zq/releases/download/v0.28.0/zq-v0.28.0.linux-amd64.zip && unzip zq-v0.28.0.linux-amd64.zip -d /usr/local/bin/
-ENV PATH /usr/local/bin/zq-v0.28.0.linux-amd64:$PATH
+RUN wget https://github.com/brimsec/zq/releases/download/$ZQVERSION/zq-$ZQVERSION.linux-amd64.zip && unzip zq-$ZQVERSION.linux-amd64.zip -d /usr/local/bin/
+ENV PATH /usr/local/bin/zq-$ZQVERSION.linux-amd64:$PATH
 #make directory for zq spaces and pcap_store
 RUN mkdir spaces
 RUN mkdir pcap_store
