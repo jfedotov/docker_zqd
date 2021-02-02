@@ -143,11 +143,14 @@ def update_and_push_to_git(zqversion):
 
 def git_push(version):
     repo = git.Repo('.git')
-    # git.Remote.add_url(repo.remote('origin'), REMOTE_GIT_REPO)
-    repo.git.branch(version)
+    try:
+        repo.git.branch(version)
+    except:
+        pass
     repo.git.checkout(version)
     repo.git.add(update=True)
     repo.index.commit('updating zq to version ' + version)
+    git.Remote.add_url(repo.remote('origin'), REMOTE_GIT_REPO)
     origin = repo.remote(name='origin')
     origin.push()
 
