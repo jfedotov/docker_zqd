@@ -148,8 +148,14 @@ def git_push(version):
 
     repo = git.Repo(PATH_OF_GIT_REPO)
 
+    # List remotes
+    print('Remotes:')
+    for remote in repo.remotes:
+        print(f'- {remote.name} {remote.url}')
+
     try:
         remote = repo.create_remote('origin', url='https://gitlab-sjc.cisco.com/evfedoto/docker_zqd.git')
+        repo.remote()
     except git.exc.GitCommandError as error:
         print(f'Error creating remote: {error}')
 
