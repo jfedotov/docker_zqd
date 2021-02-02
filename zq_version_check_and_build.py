@@ -147,6 +147,7 @@ def git_push(version):
 
 
     repo = git.Repo(PATH_OF_GIT_REPO)
+    git.Remote.add_url(repo.remote('origin'), 'https://gitlab-sjc.cisco.com/evfedoto/docker_zqd.git')
 
     # List remotes
     print('Remotes:')
