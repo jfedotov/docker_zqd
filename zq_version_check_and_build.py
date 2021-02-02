@@ -157,9 +157,6 @@ def git_push(version):
 def main():
     zq_version = get_zq_version()
     docker_version = get_docker_version()
-
-    print(docker_version)
-
     if zq_version and docker_version:
         if Version(zq_version) > Version(docker_version):
             print("New zq version is available!")
