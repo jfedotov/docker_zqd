@@ -151,8 +151,8 @@ def git_push(version):
     repo.git.add(update=True)
     repo.index.commit('updating zq to version ' + version)
     git.Remote.add_url(repo.remote('origin'), REMOTE_GIT_REPO)
-    origin = repo.remote(name='origin')
-    origin.push('--set-upstream', 'origin', repo.create_head(version))
+    # origin = repo.remote(name='origin')
+    repo.git.push('--set-upstream', 'origin', repo.create_head(version))
 
 
 def main():
