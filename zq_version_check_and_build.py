@@ -143,8 +143,17 @@ def update_and_push_to_git(zqversion):
 
 
 def git_push(version):
+    # Create a new remote
+
 
     repo = git.Repo(PATH_OF_GIT_REPO)
+
+    try:
+        remote = repo.create_remote('origin', url='https://gitlab-sjc.cisco.com/evfedoto/docker_zqd.git')
+    except git.exc.GitCommandError as error:
+        print(f'Error creating remote: {error}')
+
+
     repo.git.add(update=True)
     repo.index.commit('updating zq to version ' + version)
     origin = repo.remote(name='origin')
