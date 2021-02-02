@@ -125,7 +125,7 @@ def get_docker_version() -> str:
     if len(ver_list) > 0:
         return max(ver_list)
     else:
-        return ''
+        return '0.0.0'
 
 
 def replaceZQversion(file, searchExp, replaceExp):
@@ -151,14 +151,15 @@ def git_push(version):
     repo.git.add(update=True)
     repo.index.commit('updating zq to version ' + version)
     git.Remote.add_url(repo.remote('origin'), REMOTE_GIT_REPO)
-    # origin = repo.remote(name='origin')
     repo.git.push('--set-upstream', 'origin', repo.create_head(version))
 
 
 def main():
     zq_version = get_zq_version()
     docker_version = get_docker_version()
-    update_and_push_to_git('0.27.1')
+
+    print(docker_version)
+
     if zq_version and docker_version:
         if Version(zq_version) > Version(docker_version):
             print("New zq version is available!")
