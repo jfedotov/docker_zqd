@@ -1,11 +1,12 @@
 import fileinput
 import re
+import subprocess
 import sys
 import git
 import requests
 
-REMOTE_GIT_REPO = 'https://github.com/jfedotov/docker_zqd.git'
-
+REMOTE_GIT_REPO1 = 'https://github.com/jfedotov/docker_zqd.git'
+REMOTE_GIT_REPO2 = 'https://gitlab-sjc.cisco.com/evfedoto/docker_zqd.git'
 
 class Version:
     def __init__(self, v: str):
@@ -134,12 +135,34 @@ def replaceZQversion(file, searchExp, replaceExp):
 
 def update_and_push_to_git(zqversion):
     replaceZQversion("Dockerfile", "ARG ZQVERSION", "ARG ZQVERSION=v" + zqversion)
+    replaceZQversion("compile_and_pushToCisco.sh", "ZQVERSION=v", "ZQVERSION=v" + zqversion)
     git_push('v' + zqversion)
+    build_dockerimage_push_to_cisco()
 
+
+def build_dockerimage_push_to_cisco():
+    process = subprocess.Popen(['./compile_and_pushToCisco.sh'],
+                               stdout=subprocess.PIPE,
+                               universal_newlines=True)
+
+    while True:
+        return_code = process.poll()
+        if return_code is not None:
+            print('RETURN CODE', return_code)
+            for output in process.stdout.readlines():
+                print(output.strip())
+            break
 
 def git_push(version):
+    urls = []
     repo = git.Repo('.git')
-    git.Remote.add_url(repo.remote('origin'), REMOTE_GIT_REPO)
+    for u in repo.remote('origin').urls:
+        urls.append(u)
+    if REMOTE_GIT_REPO1 not in urls:
+        git.Remote.add_url(repo.remote('origin'), REMOTE_GIT_REPO1)
+    if REMOTE_GIT_REPO2 not in urls:
+        git.Remote.add_url(repo.remote('origin'), REMOTE_GIT_REPO2)
+
     try:
         repo.git.branch(version)
     except:
@@ -153,14 +176,16 @@ def git_push(version):
 def main():
     zq_version = get_zq_version()
     docker_version = get_docker_version()
+    print('ZQ version is:           ', zq_version)
+    print('Docker image version is: ', docker_version)
     if zq_version and docker_version:
         if Version(zq_version) > Version(docker_version):
             print("New zq version is available!")
-            print("Push changes to git.")
+            print("Push changes to github, build docker image and push it to containers.cisco.com.")
             update_and_push_to_git(zq_version)
+            print('Done.')
         else:
-            print("no new version.")
-
+            print("Docker image is up to date")
 
 if __name__ == "__main__":
     main()
