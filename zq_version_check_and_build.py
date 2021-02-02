@@ -1,12 +1,9 @@
 import fileinput
 import re
 import sys
-
 import git
 import requests
 
-# PATH_OF_GIT_REPO = r'.git'
-# REMOTE_GIT_REPO = 'https://gitlab-sjc.cisco.com/evfedoto/docker_zqd.git'
 REMOTE_GIT_REPO = 'https://github.com/jfedotov/docker_zqd.git'
 
 
@@ -116,8 +113,6 @@ def get_zq_version() -> str:
 def get_docker_version() -> str:
     ver_list = []
     resp = requests.get('https://registry.hub.docker.com/v1/repositories/jfedotov/zqd/tags')
-    # resp = requests.get(
-    #     'https://containers.cisco.com/api/v1/repository/evfedoto/zqd/tag/?limit=2&page=1&onlyActiveTags=true')
     if resp.status_code == 200:
         for j in resp.json():
             if 'name' in j:
