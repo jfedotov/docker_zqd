@@ -7,7 +7,7 @@ import git
 import requests
 
 # PATH_OF_GIT_REPO = r'.git'
-PATH_OF_GIT_REPO = '.git'
+REMOTE_GIT_REPO = 'https://gitlab-sjc.cisco.com/evfedoto/docker_zqd.git'
 
 class Version:
     def __init__(self, v: str):
@@ -143,17 +143,12 @@ def update_and_push_to_git(zqversion):
 
 
 def git_push(version):
-    # Create a new remote
-
-
-    repo = git.Repo(PATH_OF_GIT_REPO)
-    git.Remote.add_url(repo.remote('origin'), 'https://gitlab-sjc.cisco.com/evfedoto/docker_zqd.git')
-
+    repo = git.Repo('.git')
+    # git.Remote.add_url(repo.remote('origin'), REMOTE_GIT_REPO)
     repo.git.add(update=True)
     repo.index.commit('updating zq to version ' + version)
     origin = repo.remote(name='origin')
     origin.push()
-
     print('Some error occurred while pushing the code.')
 
 
