@@ -1,6 +1,5 @@
 # docker_zqd
 https://hub.docker.com/r/jfedotov/zqd
-https://containers.cisco.com/repository/evfedoto/zqd
 
 **LIMITATION:**
 

@@ -6,7 +6,8 @@ import git
 import requests
 
 # PATH_OF_GIT_REPO = r'.git'
-REMOTE_GIT_REPO = 'https://gitlab-sjc.cisco.com/evfedoto/docker_zqd.git'
+# REMOTE_GIT_REPO = 'https://gitlab-sjc.cisco.com/evfedoto/docker_zqd.git'
+REMOTE_GIT_REPO = 'https://github.com/jfedotov/docker_zqd.git'
 
 
 class Version:
@@ -114,11 +115,11 @@ def get_zq_version() -> str:
 
 def get_docker_version() -> str:
     ver_list = []
-    # resp = requests.get('https://registry.hub.docker.com/v1/repositories/jfedotov/zqd/tags')
-    resp = requests.get(
-        'https://containers.cisco.com/api/v1/repository/evfedoto/zqd/tag/?limit=2&page=1&onlyActiveTags=true')
+    resp = requests.get('https://registry.hub.docker.com/v1/repositories/jfedotov/zqd/tags')
+    # resp = requests.get(
+    #     'https://containers.cisco.com/api/v1/repository/evfedoto/zqd/tag/?limit=2&page=1&onlyActiveTags=true')
     if resp.status_code == 200:
-        for j in resp.json()['tags']:
+        for j in resp.json():
             if 'name' in j:
                 if j['name'].startswith('v'):
                     ver_list.append(j['name'][1:])
@@ -143,6 +144,7 @@ def update_and_push_to_git(zqversion):
 
 def git_push(version):
     repo = git.Repo('.git')
+    git.Remote.add_url(repo.remote('origin'), REMOTE_GIT_REPO)
     try:
         repo.git.branch(version)
     except:
@@ -150,20 +152,21 @@ def git_push(version):
     repo.git.checkout(version)
     repo.git.add(update=True)
     repo.index.commit('updating zq to version ' + version)
-    git.Remote.add_url(repo.remote('origin'), REMOTE_GIT_REPO)
     repo.git.push('--set-upstream', 'origin', repo.create_head(version))
 
 
 def main():
     zq_version = get_zq_version()
     docker_version = get_docker_version()
-    if zq_version and docker_version:
-        if Version(zq_version) > Version(docker_version):
-            print("New zq version is available!")
-            print("Push changes to git.")
-            update_and_push_to_git(zq_version)
-        else:
-            print("no new version.")
+    update_and_push_to_git(zq_version)
+    print(zq_version, docker_version)
+    # if zq_version and docker_version:
+    #     if Version(zq_version) > Version(docker_version):
+    #         print("New zq version is available!")
+    #         print("Push changes to git.")
+    #         update_and_push_to_git(zq_version)
+    #     else:
+    #         print("no new version.")
 
 
 if __name__ == "__main__":
