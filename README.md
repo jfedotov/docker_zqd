@@ -13,7 +13,7 @@ Space location is /zqd_app/spaces/ Folder is mounted with local "spaces" directo
 
 **How to use:**
 
-    1. Start docker container with "docker-compose up" command.
+    1. Start docker container with "docker-compose up -d" command.
     2. Zqd is running on port 5020. Use zq API client to connect to zqd: command line, python, brim etc.
     3. To stop docker container, use "docker-compose down" command.
 
