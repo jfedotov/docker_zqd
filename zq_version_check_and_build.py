@@ -181,7 +181,7 @@ def main():
     if zq_version and docker_version:
         if Version(zq_version) > Version(docker_version):
             print("New zq version is available!")
-            print("Push changes to github, build docker image and push it to containers.cisco.com.")
+            print("Pushing changes to github, building docker image and pushing it to containers.cisco.com.")
             update_and_push_to_git(zq_version)
             print('Done.')
         else:
